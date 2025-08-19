@@ -1,8 +1,8 @@
-package com.rhayven.car;
+package com.rhayven.car.model;
 
 public class Car {
     private int carId;
-    private int licensePlateNumber;
+    private String licensePlateNumber;
     private String make;
     private String model;
     private int year;
@@ -14,7 +14,7 @@ public class Car {
     public Car() {
     }
 
-    public Car(int carId, int licensePlateNumber, String make, String model, int year,
+    public Car(int carId, String licensePlateNumber, String make, String model, int year,
                String color, String bodyType, String engineType, String transmission) {
         this.carId = carId;
         this.licensePlateNumber = licensePlateNumber;
@@ -36,11 +36,11 @@ public class Car {
         this.carId = carId;
     }
 
-    public int getLicensePlateNumber() {
+    public String getLicensePlateNumber() {
         return licensePlateNumber;
     }
 
-    public void setLicensePlateNumber(int licensePlateNumber) {
+    public void setLicensePlateNumber(String licensePlateNumber) {
         this.licensePlateNumber = licensePlateNumber;
     }
 

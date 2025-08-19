@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Car List</title>
+    <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-
+<h1>Car List</h1>
+<a class="add-button" href="/add">Add New Car</a>
+<table border="1">
+    <thead>
+    <tr>
+        <th>CarID</th>
+        <th>License Plate</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+        <th>Color</th>
+        <th>Body Type</th>
+        <th>Engine Type</th>
+        <th>Transmission</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="car : ${cars}">
+        <td th:text="${car.carId}"></td>
+        <td th:text="${car.licensePlateNumber}"></td>
+        <td th:text="${car.make}"></td>
+        <td th:text="${car.model}"></td>
+        <td th:text="${car.year}"></td>
+        <td th:text="${car.color}"></td>
+        <td th:text="${car.bodyType}"></td>
+        <td th:text="${car.engineType}"></td>
+        <td th:text="${car.transmission}"></td>
+    </tr>
+    </tbody>
+</table>
 </body>
 </html>

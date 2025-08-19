@@ -1,10 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="/css/form.css">
+    <title>Add Car</title>
     <meta charset="UTF-8">
-    <title>Title</title>
 </head>
 <body>
+<div class="container">
+    <h1>Add New Car</h1>
 
+    <form th:action="@{/add}" th:object="${car}" method="post" class="car-form">
+
+        <label>License Plate:</label>
+        <input type="text" th:field="*{licensePlateNumber}" required/>
+
+        <label>Make:</label>
+        <input type="text" th:field="*{make}" required/>
+
+        <label>Model:</label>
+        <input type="text" th:field="*{model}" required/>
+
+        <label>Year:</label>
+        <input type="number" th:field="*{year}" min="1900" max="2099" required/>
+
+        <label>Color:</label>
+        <input type="text" th:field="*{color}" required/>
+
+        <label>Body Type:</label>
+        <select th:field="*{bodyType}" required>
+            <option value="">-- Select Body Type --</option>
+            <option value="Sedan">Sedan</option>
+            <option value="SUV">SUV</option>
+            <option value="Hatchback">Hatchback</option>
+        </select>
+
+        <label>Engine Type:</label>
+        <select th:field="*{engineType}" required>
+            <option value="">-- Select Engine Type --</option>
+            <option value="Gasoline">Gasoline</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Electric">Electric</option>
+            <option value="Hybrid">Hybrid</option>
+        </select>
+
+        <label>Transmission:</label>
+        <select th:field="*{transmission}" required>
+            <option value="">-- Select Transmission --</option>
+            <option value="Automatic">Automatic</option>
+            <option value="Manual">Manual</option>
+        </select>
+
+        <button type="submit" class="add-button">Add Car</button>
+    </form>
+
+    <a th:href="@{/}" class="back-link">Back to Car List</a>
+</div>
 </body>
 </html>

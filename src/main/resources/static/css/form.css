@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fefefe;
+    color: #1b3a1b;
+    padding: 20px;
+}
+
+.container {
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 30px 25px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(27, 58, 27, 0.15);
+}
+
+h1 {
+    color: #1b3a1b;
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 30px;
+}
+
+.car-form label {
+    display: block;
+    font-weight: bold;
+    color: #1b3a1b;
+    margin-top: 15px;
+    margin-bottom: 6px;
+}
+
+.car-form input[type="text"],
+.car-form input[type="number"],
+.car-form select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #fff0f5;
+    border-radius: 4px;
+    color: #1b3a1b;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.car-form input[type="text"]:focus,
+.car-form input[type="number"]:focus,
+.car-form select:focus {
+    border-color: #cc6688;
+    outline: none;
+}
+
+button.add-button {
+    margin-top: 25px;
+    padding: 10px 20px;
+    background-color: #1b3a1b;
+    color: #fff0f5;
+    border: 2px solid #fff0f5;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1.1em;
+}
+
+button.add-button:hover {
+    background-color: #2e6131;
+    color: #f4e1e7;
+}
+
+a.back-link {
+    display: block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #1b3a1b;
+    color: #fff0f5;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid #fff0f5;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+a.back-link:hover {
+    background-color: #2e6131;
+    color: #f4e1e7;
+}
