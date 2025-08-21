@@ -12,33 +12,60 @@ import java.util.ArrayList;
  */
 @Service
 public class CarService {
+
+    /** In-memory list of cars */
     private ArrayList<Car> carList;
+
+    /** File name for storing car data in CSV format */
     private final String FILE_NAME = "cars_database.csv";
 
+    /**
+     * Initializes the car service and loads existing data from disk.
+     */
     public CarService() {
         carList = new ArrayList<>();
         readFromDisk();
     }
 
+    /**
+     * Returns the list of all cars.
+     *
+     * @return list of cars
+     */
     public ArrayList<Car> getCars() {
         return carList;
     }
 
+    /**
+     * Adds a new car to the list and saves changes to disk.
+     *
+     * @param car the car to add
+     */
     public void addCar(Car car) {
         car.setCarId(getLastId() + 1);
         carList.add(car);
         writeToDisk();
     }
 
+    /**
+     * Deletes a car by its ID and reassigns IDs sequentially.
+     *
+     * @param id the ID of the car to delete
+     */
     public void deleteCar(int id) {
         carList.removeIf(car -> car.getCarId() == id);
-        // Reassign IDs sequentially after deletion
         for (int i = 0; i < carList.size(); i++) {
             carList.get(i).setCarId(i + 1);
         }
         writeToDisk();
     }
 
+    /**
+     * Retrieves a car by its ID.
+     *
+     * @param id the car ID
+     * @return the car with the specified ID, or null if not found
+     */
     public Car getCar(int id) {
         for (Car car : carList) {
             if (car.getCarId() == id)
@@ -47,6 +74,11 @@ public class CarService {
         return null;
     }
 
+    /**
+     * Returns the last used car ID.
+     *
+     * @return last car ID, or 0 if list is empty
+     */
     public int getLastId() {
         if (carList.isEmpty()) {
             return 0;
@@ -54,6 +86,9 @@ public class CarService {
         return carList.get(carList.size() - 1).getCarId();
     }
 
+    /**
+     * Loads car data from the CSV file into memory.
+     */
     private void readFromDisk() {
         File file = new File(FILE_NAME);
         if (!file.exists()) return;
@@ -84,6 +119,9 @@ public class CarService {
         }
     }
 
+    /**
+     * Writes the current car list to the CSV file.
+     */
     private void writeToDisk() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Car car : carList) {
