@@ -24,6 +24,16 @@ public class CarService {
         return carList;
     }
 
+    public void updateCar(int id, Car update) {
+        for (int i = 0; i < carList.size(); i++) {
+            if (carList.get(i).getCarId() == id) {
+                carList.set(i, update);
+                writeToDisk();
+                break;
+            }
+        }
+    }
+
     public void addCar(Car car) {
         car.setCarId(getLastId() + 1);
         carList.add(car);
@@ -56,38 +66,42 @@ public class CarService {
 
     private void readFromDisk() {
         File file = new File(FILE_NAME);
-        if (!file.exists()) return;
+        if (!file.exists()) {
+            System.out.println("File not found.");
+            return;
+        }
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
-            carList.clear();
-
             while ((line = br.readLine()) != null) {
-                String[] tokens = line.split(",", -1);
-                if (tokens.length == 9) {
-                    Car car = new Car(
-                            Integer.parseInt(tokens[0]),
-                            tokens[1],
-                            tokens[2],
-                            tokens[3],
-                            Integer.parseInt(tokens[4]),
-                            tokens[5],
-                            tokens[6],
-                            tokens[7],
-                            tokens[8]
-                    );
-                    carList.add(car);
-                }
+                String[] data = line.split(",");
+
+                // Ensure we have all 9 fields
+                if (data.length < 9) continue;
+
+                Car car = new Car();
+                car.setCarId(Integer.parseInt(data[0]));
+                car.setLicensePlateNumber(data[1]);
+                car.setMake(data[2]);
+                car.setModel(data[3]);
+                car.setYear(Integer.parseInt(data[4]));
+                car.setColor(data[5]);
+                car.setBodyType(data[6]);
+                car.setEngineType(data[7]);
+                car.setTransmission(data[8]);
+
+                carList.add(car);
             }
+
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Oh no! Error: " + e.getMessage());
         }
     }
 
     private void writeToDisk() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(FILE_NAME))) {
             for (Car car : carList) {
-                String line = car.getCarId() + "," +
+                bw.write(car.getCarId() + "," +
                         car.getLicensePlateNumber() + "," +
                         car.getMake() + "," +
                         car.getModel() + "," +
@@ -95,12 +109,11 @@ public class CarService {
                         car.getColor() + "," +
                         car.getBodyType() + "," +
                         car.getEngineType() + "," +
-                        car.getTransmission();
-                writer.write(line);
-                writer.newLine();
+                        car.getTransmission());
+                bw.newLine();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Oh no! Error: " + e.getMessage());
         }
     }
 }

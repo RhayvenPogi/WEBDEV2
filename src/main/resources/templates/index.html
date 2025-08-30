@@ -5,12 +5,12 @@
     <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
-<h1>Car List</h1>
+<h1>Rhayven's Car List</h1>
 <a class="add-button" href="/add">Add New Car</a>
 <table border="1">
     <thead>
     <tr>
-        <th>CarID</th>
+        <th>Car ID</th>
         <th>License Plate</th>
         <th>Make</th>
         <th>Model</th>
@@ -19,6 +19,7 @@
         <th>Body Type</th>
         <th>Engine Type</th>
         <th>Transmission</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -32,6 +33,10 @@
         <td th:text="${car.bodyType}"></td>
         <td th:text="${car.engineType}"></td>
         <td th:text="${car.transmission}"></td>
+        <td class="action-links">
+            <a th:href="@{/edit(id=${car.carId})}" class="edit-btn">Edit</a>
+            <a th:href="@{/delete(id=${car.carId})}" class="delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
+        </td>
     </tr>
     </tbody>
 </table>

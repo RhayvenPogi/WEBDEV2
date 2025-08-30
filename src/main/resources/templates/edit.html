@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="/css/form.css">
-    <title>Add Car</title>
     <meta charset="UTF-8">
+    <title>Edit Car</title>
+    <link rel="stylesheet" href="/css/edit.css">
 </head>
 <body>
 <div class="container">
-    <h1>Add New Car</h1>
+    <h1 th:text="'Edit ' + ${car.licensePlateNumber}"></h1>
 
-    <form th:action="@{/save}" th:object="${car}" method="post" class="car-form">
+    <form th:action="@{/update}" th:object="${car}" method="post">
+        <input type="hidden" th:field="*{carId}" />
 
         <label>License Plate:</label>
         <input type="text" th:field="*{licensePlateNumber}" required/>
@@ -59,10 +60,14 @@
             <option value="Semi-Automatic">Semi-Automatic</option>
         </select>
 
-        <button type="submit" class="add-button">Add Car</button>
+        <div id="form-buttons-area">
+            <input type="submit" th:value="'Update Car'">
+            <input type="reset" value="Reset">
+            <a th:href="@{/}" class="back">Back to Car List</a>
+        </div>
     </form>
 
-    <a th:href="@{/}" class="back-link">Back to Car List</a>
+
 </div>
 </body>
 </html>

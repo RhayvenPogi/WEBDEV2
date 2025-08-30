@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.AttributedString;
+
 @Controller
 public class CarController {
 
@@ -25,15 +27,40 @@ public class CarController {
         return "new"; // Form to add a new car
     }
 
-    @PostMapping("/add")
-    public String addCar(@ModelAttribute Car car) {
+    @PostMapping("/save")
+    public String saveCar(@ModelAttribute Car car) {
         carService.addCar(car);
         return "redirect:/";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteCar(@PathVariable int id) {
+    @GetMapping("/delete")
+    public String deleteCar(@RequestParam("id") int id) {
         carService.deleteCar(id);
         return "redirect:/";
+    }
+
+    @GetMapping("/edit")
+    public String editCar(@RequestParam("id") int id, Model model){
+        Car car = carService.getCar(id);
+        if (car != null) {
+            model.addAttribute("car", car);
+            return "edit";
+        }
+
+        return "redirect:/";
+    }
+
+    @PostMapping("/update")
+    public String storeUpdateCar(@ModelAttribute("car") Car car){
+        if (car.getCarId() > 0) {
+            Car existingCar = carService.getCar(car.getCarId());
+            if (existingCar != null) {
+                // Perform the update
+                carService.updateCar(car.getCarId(), car);
+            }
+        }
+
+        return "redirect:/";
+
     }
 }

@@ -1,38 +1,42 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #fefefe;
-    color: #1b3a1b;
+    color: #122512;
     padding: 20px;
 }
 
 h1 {
-    color: #1b3a1b;
+    color: #122512;
     text-align: center;
     font-weight: 900;
+    font-size: 2.7em;
 }
 
+/* Add Button */
 .add-button {
     display: inline-block;
     margin-bottom: 20px;
     padding: 8px 15px;
-    background-color: #1b3a1b;
+    background-color: #122512;
     color: #fff0f5;
     text-decoration: none;
     border-radius: 5px;
     border: 2px solid #fff0f5;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .add-button:hover {
-    background-color: #2e6131;
+    background-color: #1c3a1e;
     color: #f4e1e7;
 }
 
+/* Table Styles */
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: #ffffff;
-    color: #092709;
+    color: #122512;
+    border:none;
 }
 
 th, td {
@@ -43,14 +47,56 @@ th, td {
 
 th {
     color: #f6e7ec;
-    background-color: #11330d;
+    background-color: #122512;
+    text-align: center;
 }
 
 tr:nth-child(even) {
     background-color: #eaf3ea;
 }
 
-tr:hover {
-    background-color: #c7efc7;
-    color: #3e262d;
+
+/* Action Buttons inside Table */
+.action-links {
+    display: flex;
+    gap: 8px; /* space between Edit and Delete */
+    justify-content: center;
+}
+
+.action-links a {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    font-weight: bold;
+    border-radius: 4px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
+    line-height: 1.2;
+}
+
+/* Edit Button */
+.edit-btn {
+    background-color: #122512;
+    color: #fff0f5;
+    border-color: #fff0f5;
+}
+
+.edit-btn:hover {
+    background-color: #1c3a1e;
+    color: #f4e1e7;
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: #7a1a1a;
+    color: #fff0f5;
+    border-color: #fff0f5;
+}
+
+.delete-btn:hover {
+    background-color: #a12d2d;
+    color: #ffeef5;
 }
