@@ -1,7 +1,5 @@
 package com.rhayven.car;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/cars")
+@RequestMapping("/")
 public class CarController {
 
     CarRepository carRepository;
@@ -35,21 +33,22 @@ public class CarController {
         return "new"; // Form to add a new car
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public String saveCar(@ModelAttribute Car car) {
         carRepository.save(car);
-        return "redirect:/cars";
+        return "redirect:/";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteCar(@PathVariable int id) {
         carRepository.deleteById(id);
-        return "redirect:/cars";
+        return "redirect:/";
     }
 
     @GetMapping("/edit/{id}")
-    public String editCar(@PathVariable  int id, Model model){
-        Car car = carRepository.findById(id).orElseThrow();
+    public String editCar(@PathVariable int id, Model model){
+        Car car = carRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid car ID: " + id));
         model.addAttribute("car", car);
         return "edit";
     }
@@ -58,6 +57,6 @@ public class CarController {
     public String storeUpdateCar(@PathVariable int id, @ModelAttribute Car car){
         car.setCarId(id);
         carRepository.save(car);
-        return "redirect:/cars";
+        return "redirect:/";
     }
 }

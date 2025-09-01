@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>Rhayven's Car List</h1>
-<a class="add-button" th:href="@{/cars/add}">Add New Car</a>
+<a class="add-button" th:href="@{/add}">Add New Car</a>
 <table border="1">
     <thead>
     <tr>
@@ -34,8 +34,8 @@
         <td th:text="${car.engineType}"></td>
         <td th:text="${car.transmission}"></td>
         <td class="action-links">
-            <a th:href="@{/cars/edit/{id}(id=${car.carId})}" class="edit-btn">Edit</a>
-            <a th:href="@{/cars/delete/{id}(id=${car.carId})}" class="delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
+            <a th:href="@{/edit/{id}(id=${car.carId})}" class="edit-btn">Edit</a>
+            <a th:href="@{/delete/{id}(id=${car.carId})}" class="delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
         </td>
     </tr>
     </tbody>
