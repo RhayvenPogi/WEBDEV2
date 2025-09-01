@@ -1,33 +1,43 @@
+/* Global Styles */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #fefefe;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #fefefe, #f5faf5);
     color: #122512;
     padding: 20px;
+    line-height: 1.6;
+    margin: 0;
 }
 
+/* Headings */
 h1 {
-    color: #122512;
+    background: linear-gradient(90deg, #122512, #1c3a1e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-align: center;
     font-weight: 900;
     font-size: 2.7em;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
 }
 
-/* Add Button */
+/* Primary Button */
 .add-button {
     display: inline-block;
     margin-bottom: 20px;
-    padding: 8px 15px;
-    background-color: #122512;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #122512, #1c3a1e);
     color: #fff0f5;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 2px solid #fff0f5;
-    transition: all 0.3s ease;
+    font-weight: bold;
+    transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
 }
 
 .add-button:hover {
-    background-color: #1c3a1e;
+    background: linear-gradient(135deg, #1c3a1e, #2a4c2a);
     color: #f4e1e7;
+    transform: translateY(-2px);
 }
 
 /* Table Styles */
@@ -36,67 +46,75 @@ table {
     border-collapse: collapse;
     background-color: #ffffff;
     color: #122512;
-    border:none;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
-    border: 1px solid #fff0f5;
-    padding: 10px;
+    border: 1px solid #f6e7ec;
+    padding: 12px 15px;
     text-align: left;
 }
 
 th {
+    background: linear-gradient(135deg, #122512, #1c3a1e);
     color: #f6e7ec;
-    background-color: #122512;
     text-align: center;
+    font-size: 1.05em;
+    font-weight: bold;
 }
 
 tr:nth-child(even) {
-    background-color: #eaf3ea;
+    background-color: #f5faf5;
 }
 
+tr:hover {
+    background: linear-gradient(90deg, #eaf3ea, #f0faf0);
+    transition: background 0.3s ease;
+}
 
-/* Action Buttons inside Table */
+/* Action Buttons Container */
 .action-links {
     display: flex;
-    gap: 8px; /* space between Edit and Delete */
+    gap: 10px;
     justify-content: center;
 }
 
+/* Action Buttons */
 .action-links a {
     display: inline-block;
-    padding: 5px 10px;
+    padding: 6px 12px;
     font-size: 0.9em;
     font-weight: bold;
-    border-radius: 4px;
+    border-radius: 6px;
     text-decoration: none;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
     border: 2px solid transparent;
     cursor: pointer;
-    line-height: 1.2;
 }
 
 /* Edit Button */
 .edit-btn {
-    background-color: #122512;
+    background: linear-gradient(135deg, #122512, #1c3a1e);
     color: #fff0f5;
     border-color: #fff0f5;
 }
 
 .edit-btn:hover {
-    background-color: #1c3a1e;
+    background: linear-gradient(135deg, #1c3a1e, #2a4c2a);
     color: #f4e1e7;
 }
 
 /* Delete Button */
 .delete-btn {
-    background-color: #7a1a1a;
+    background: linear-gradient(135deg, #7a1a1a, #a12d2d);
     color: #fff0f5;
     border-color: #fff0f5;
 }
 
 .delete-btn:hover {
-    background-color: #a12d2d;
+    background: linear-gradient(135deg, #a12d2d, #b33a3a);
     color: #ffeef5;
 }
