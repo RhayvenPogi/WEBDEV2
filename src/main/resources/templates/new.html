@@ -9,7 +9,7 @@
 <div class="container">
     <h1>Add New Car</h1>
 
-    <form th:action="@{/save}" th:object="${car}" method="post" class="car-form">
+    <form th:action="@{/cars}" th:object="${car}" method="post" class="car-form">
 
         <label>License Plate:</label>
         <input type="text" th:field="*{licensePlateNumber}" required/>
@@ -62,7 +62,7 @@
         <button type="submit" class="add-button">Add Car</button>
     </form>
 
-    <a th:href="@{/}" class="back-link">Back to Car List</a>
+    <a th:href="@{/cars}" class="back-link">Back to Car List</a>
 </div>
 </body>
 </html>

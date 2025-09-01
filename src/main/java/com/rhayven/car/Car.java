@@ -1,6 +1,15 @@
-package com.rhayven.car.model;
+package com.rhayven.car;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Car {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int carId;
     private String licensePlateNumber;
     private String make;
@@ -11,21 +20,7 @@ public class Car {
     private String engineType;
     private String transmission;
 
-    public Car() {
-    }
 
-    public Car(int carId, String licensePlateNumber, String make, String model, int year,
-               String color, String bodyType, String engineType, String transmission) {
-        this.carId = carId;
-        this.licensePlateNumber = licensePlateNumber;
-        this.make = make;
-        this.model = model;
-        this.year = year;
-        this.color = color;
-        this.bodyType = bodyType;
-        this.engineType = engineType;
-        this.transmission = transmission;
-    }
 
     // Getters and Setters
     public int getCarId() {

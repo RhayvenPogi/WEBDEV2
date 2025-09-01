@@ -9,7 +9,7 @@
 <div class="container">
     <h1 th:text="'Edit ' + ${car.licensePlateNumber}"></h1>
 
-    <form th:action="@{/update}" th:object="${car}" method="post">
+    <form th:action="@{/cars/update/{id}(id=${car.carId})}" th:object="${car}" method="post">
         <input type="hidden" th:field="*{carId}" />
 
         <label>License Plate:</label>
@@ -63,7 +63,7 @@
         <div id="form-buttons-area">
             <input type="submit" th:value="'Update Car'">
             <input type="reset" value="Reset">
-            <a th:href="@{/}" class="back">Back to Car List</a>
+            <a th:href="@{/cars}" class="back">Back to Car List</a>
         </div>
     </form>
 
