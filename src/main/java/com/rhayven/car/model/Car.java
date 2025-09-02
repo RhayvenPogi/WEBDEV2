@@ -1,4 +1,4 @@
-package com.rhayven.car;
+package com.rhayven.car.model;
 
 
 import jakarta.persistence.Entity;

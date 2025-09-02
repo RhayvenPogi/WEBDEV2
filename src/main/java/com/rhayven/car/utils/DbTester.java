@@ -1,5 +1,6 @@
-package com.rhayven.car;
+package com.rhayven.car.utils;
 
+import com.rhayven.car.repository.CarRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

@@ -1,5 +1,8 @@
-package com.rhayven.car;
+package com.rhayven.car.controller;
 
+import com.rhayven.car.exception.ResourceNotFoundException;
+import com.rhayven.car.repository.CarRepository;
+import com.rhayven.car.model.Car;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +51,7 @@ public class CarController {
     @GetMapping("/edit/{id}")
     public String editCar(@PathVariable int id, Model model){
         Car car = carRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid car ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Car", id));
         model.addAttribute("car", car);
         return "edit";
     }
