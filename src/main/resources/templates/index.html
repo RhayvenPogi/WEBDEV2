@@ -23,8 +23,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="car, iter : ${cars}">
-        <td th:text="${iter.count}"></td> 
+    <tr th:each="car: ${cars}">
+        <td th:text="${car.carId}"></td>
         <td th:text="${car.licensePlateNumber}"></td>
         <td th:text="${car.make}"></td>
         <td th:text="${car.model}"></td>
