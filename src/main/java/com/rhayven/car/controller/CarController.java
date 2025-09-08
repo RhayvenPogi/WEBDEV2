@@ -1,10 +1,12 @@
 package com.rhayven.car.controller;
 
-import com.rhayven.car.exception.ResourceNotFoundException;
-import com.rhayven.car.repository.CarRepository;
-import com.rhayven.car.model.Car;
+import com.rhayven.car.dto.CarDTO;
+import com.rhayven.car.entity.Car;
+import com.rhayven.car.service.CarService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,53 +15,73 @@ import java.util.List;
 @RequestMapping("/")
 public class CarController {
 
-    CarRepository carRepository;
+    private final CarService carService;
 
-    public CarController(CarRepository carRepository){
-        this.carRepository = carRepository;
+    public CarController(CarService carService) {
+        this.carService = carService;
     }
 
     @GetMapping
     public String index(Model model) {
-        List<Car> cars = carRepository.findAll();
-        model.addAttribute("cars",carRepository.findAll());
-        cars.forEach(car -> {
-            System.out.println(car.getMake());
-        });
-        return "index"; // Show all cars in a table
+        List<Car> cars = carService.getAllCars();
+        model.addAttribute("cars", cars);
+        return "index";
     }
 
     @GetMapping("/add")
     public String addForm(Model model) {
-        Car car = new Car();
-        model.addAttribute("car",car);
-        return "new"; // Form to add a new car
+        model.addAttribute("carDTO", new CarDTO());
+        return "new";
     }
 
     @PostMapping("/save")
-    public String saveCar(@ModelAttribute Car car) {
-        carRepository.save(car);
+    public String saveCar(@Valid @ModelAttribute("carDTO") CarDTO carDTO,
+                          BindingResult result) {
+        if (result.hasErrors()) {
+            return "new";
+        }
+
+        carService.save(carDTO);
         return "redirect:/";
     }
 
     @GetMapping("/delete/{id}")
     public String deleteCar(@PathVariable int id) {
-        carRepository.deleteById(id);
+        carService.delete(id);
         return "redirect:/";
     }
 
     @GetMapping("/edit/{id}")
-    public String editCar(@PathVariable int id, Model model){
-        Car car = carRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Car", id));
-        model.addAttribute("car", car);
+    public String editCar(@PathVariable int id, Model model) {
+        Car car = carService.getCarById(id);
+
+        CarDTO carDTO = new CarDTO();
+        carDTO.setLicensePlateNumber(car.getLicensePlateNumber());
+        carDTO.setMake(car.getMake());
+        carDTO.setModel(car.getModel());
+        carDTO.setYear(car.getYear());
+        carDTO.setColor(car.getColor());
+        carDTO.setBodyType(car.getBodyType());
+        carDTO.setEngineType(car.getEngineType());
+        carDTO.setTransmission(car.getTransmission());
+
+        model.addAttribute("carDTO", carDTO);
+        model.addAttribute("carId", id);
+
         return "edit";
     }
 
     @PostMapping("/update/{id}")
-    public String storeUpdateCar(@PathVariable int id, @ModelAttribute Car car){
-        car.setCarId(id);
-        carRepository.save(car);
+    public String storeUpdateCar(@PathVariable int id,
+                                 @Valid @ModelAttribute("carDTO") CarDTO carDTO,
+                                 BindingResult result,
+                                 Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("carId", id);
+            return "edit";
+        }
+
+        carService.update(id, carDTO);
         return "redirect:/";
     }
 }

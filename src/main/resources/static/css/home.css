@@ -1,4 +1,4 @@
-/* Global Styles */
+
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     background: linear-gradient(135deg, #fefefe, #f5faf5);
@@ -79,6 +79,7 @@ tr:hover {
     display: flex;
     gap: 10px;
     justify-content: center;
+
 }
 
 /* Action Buttons */
@@ -91,12 +92,12 @@ tr:hover {
     text-decoration: none;
     text-align: center;
     transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
-    border: 2px solid transparent;
     cursor: pointer;
 }
 
 /* Edit Button */
 .edit-btn {
+
     background: linear-gradient(135deg, #122512, #1c3a1e);
     color: #fff0f5;
     border-color: #fff0f5;

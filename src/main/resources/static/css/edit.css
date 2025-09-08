@@ -10,7 +10,7 @@ body {
 
 /* Container Card */
 .container {
-    max-width: 500px;
+    max-width: 600px;
     margin: 50px auto;
     padding: 35px 28px;
     background-color: #ffffff;
@@ -86,11 +86,26 @@ form select:focus {
     box-sizing: border-box;
     transition: background 0.3s ease, transform 0.2s ease;
 }
-
+#form-buttons-area .back{
+    padding: 10px 20px;
+}
 #form-buttons-area input[type="submit"]:hover,
 #form-buttons-area input[type="reset"]:hover,
 #form-buttons-area a.back:hover {
     background: linear-gradient(135deg, #1c3a1e, #122512);
     color: #ffeaf2;
     transform: translateY(-2px);
+}
+
+.error {
+    color: #cc3333;
+    background-color: #ffe6e6;
+    border-left: 4px solid #cc3333;
+    padding: 6px 10px;
+    font-size: 0.7em;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    border-radius: 4px;
+    box-sizing: border-box;
 }

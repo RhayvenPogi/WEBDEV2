@@ -1,35 +1,35 @@
-package com.rhayven.car.model;
+package com.rhayven.car.dto;
 
+import jakarta.validation.constraints.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+public class CarDTO {
 
-@Entity
-public class Car {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int carId;
+    @NotBlank(message = "License plate number is required")
     private String licensePlateNumber;
+
+    @NotBlank(message = "Make is required")
     private String make;
+
+    @NotBlank(message = "Model is required")
     private String model;
+
+    @Min(value = 1990, message = "Year must be no earlier than 1990")
+    @Max(value = 2100, message = "Year must be realistic")
     private int year;
+
+    @NotBlank(message = "Color is required")
     private String color;
+
+    @NotBlank(message = "Body type is required")
     private String bodyType;
+
+    @NotBlank(message = "Engine type is required")
     private String engineType;
+
+    @NotBlank(message = "Transmission type is required")
     private String transmission;
 
-
-
     // Getters and Setters
-    public int getCarId() {
-        return carId;
-    }
-
-    public void setCarId(int carId) {
-        this.carId = carId;
-    }
 
     public String getLicensePlateNumber() {
         return licensePlateNumber;
