@@ -13,23 +13,23 @@
 
         <label>License Plate:</label>
         <input type="text" th:field="*{licensePlateNumber}" />
-        <div th:if="${#fields.hasErrors('licensePlateNumber')}" th:errors="*{licensePlateNumber}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('licensePlateNumber')}" th:errors="*{licensePlateNumber}"></div>
 
         <label>Make:</label>
         <input type="text" th:field="*{make}" />
-        <div th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></div>
 
         <label>Model:</label>
         <input type="text" th:field="*{model}"  />
-        <div th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
 
         <label>Year:</label>
         <input type="number" th:field="*{year}" />
-        <div th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
 
         <label>Color:</label>
         <input type="text" th:field="*{color}" />
-        <div th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
 
         <label>Body Type:</label>
         <select th:field="*{bodyType}" >
@@ -46,7 +46,7 @@
             <option value="Crossover">Crossover</option>
             <option value="Minivan">Minivan</option>
         </select>
-        <div th:if="${#fields.hasErrors('bodyType')}" th:errors="*{bodyType}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('bodyType')}" th:errors="*{bodyType}"></div>
 
         <label>Engine Type:</label>
         <select th:field="*{engineType}" >
@@ -56,7 +56,7 @@
             <option value="Electric">Electric</option>
             <option value="Hybrid">Hybrid</option>
         </select>
-        <div th:if="${#fields.hasErrors('engineType')}" th:errors="*{engineType}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('engineType')}" th:errors="*{engineType}"></div>
 
         <label>Transmission:</label>
         <select th:field="*{transmission}" >
@@ -65,7 +65,7 @@
             <option value="Manual">Manual</option>
             <option value="Semi-Automatic">Semi-Automatic</option>
         </select>
-        <div th:if="${#fields.hasErrors('transmission')}" th:errors="*{transmission}"></div>
+        <div class="error"  th:if="${#fields.hasErrors('transmission')}" th:errors="*{transmission}"></div>
 
         <div id="form-buttons-area">
             <input type="submit" th:value="'Update Car'">
