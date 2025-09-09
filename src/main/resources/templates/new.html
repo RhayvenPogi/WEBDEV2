@@ -13,15 +13,15 @@
     <form th:action="@{/save}" th:object="${carDTO}" method="post" class="car-form">
 
         <label>License Plate:</label>
-        <input type="text" th:field="*{licensePlateNumber}" />
+        <input type="text" th:field="*{licensePlateNumber}" placeholder="e.g., ABC 1234"/>
         <div class="error" th:if="${#fields.hasErrors('licensePlateNumber')}" th:errors="*{licensePlateNumber}"></div>
 
         <label>Make:</label>
-        <input type="text" th:field="*{make}"/>
+        <input type="text" th:field="*{make}" placeholder="e.g., Toyota"/>
         <div class="error" th:if="${#fields.hasErrors('make')}" th:errors="*{make}"></div>
 
         <label>Model:</label>
-        <input type="text" th:field="*{model}" />
+        <input type="text" th:field="*{model}" placeholder="e.g., Corolla"/>
         <div class="error" th:if="${#fields.hasErrors('model')}" th:errors="*{model}"></div>
 
         <label>Year:</label>
@@ -29,7 +29,7 @@
         <div class="error" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
 
         <label>Color:</label>
-        <input type="text" th:field="*{color}" />
+        <input type="text" th:field="*{color}" placeholder="e.g., Red" />
         <div class="error" th:if="${#fields.hasErrors('color')}" th:errors="*{color}"></div>
 
         <label>Body Type:</label>

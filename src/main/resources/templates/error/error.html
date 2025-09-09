@@ -7,9 +7,11 @@
 </head>
 <body>
 <div class="error-container">
-    <h1 class="error-title">Oops! Something went wrong</h1>
-    <p class="error-message" th:text="${message}"></p>
-    <a class="home-link" th:href="@{/static}">← Back to Home</a>
+    <img src="images/error.png" alt="error img"/>
+    <h1 class="error-title">Engine Check: Page Not Found</h1>
+    <p class="error-display">The page you’re trying to reach isn’t on our route.</p>
+    <p class="message" th:text="${message}"></p>
+    <a class="home-link" th:href="@{/}">← Back to Home</a>
 </div>
 </body>
 </html>

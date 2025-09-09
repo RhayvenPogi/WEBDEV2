@@ -33,18 +33,19 @@ body {
 .error-title {
     font-size: 2.5em;
     font-weight: 900;
-    background: linear-gradient(90deg, #122512, #1c3a1e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 20px;
+    margin: 0;
 }
 
 /* Message */
-.error-message {
+.error-display {
     font-size: 1.25em;
     color: #2a4c2a;
     margin-bottom: 30px;
     line-height: 1.7;
+}
+
+.message{
+    display: none;
 }
 
 /* Back Link */
@@ -81,7 +82,7 @@ body {
         font-size: 2em;
     }
 
-    .error-message {
+    .error-display {
         font-size: 1.1em;
     }
 
