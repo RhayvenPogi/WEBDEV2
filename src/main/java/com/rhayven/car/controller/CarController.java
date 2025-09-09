@@ -54,7 +54,6 @@ public class CarController {
     @GetMapping("/edit/{id}")
     public String editCar(@PathVariable int id, Model model) {
         Car car = carService.getCarById(id);
-
         CarDTO carDTO = new CarDTO();
         carDTO.setLicensePlateNumber(car.getLicensePlateNumber());
         carDTO.setMake(car.getMake());
@@ -67,8 +66,8 @@ public class CarController {
 
         model.addAttribute("carDTO", carDTO);
         model.addAttribute("carId", id);
-
         return "edit";
+
     }
 
     @PostMapping("/update/{id}")
