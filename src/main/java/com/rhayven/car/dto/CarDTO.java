@@ -1,5 +1,6 @@
 package com.rhayven.car.dto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 
 public class CarDTO {

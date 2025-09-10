@@ -1,33 +1,31 @@
 /* Global Styles */
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #fefefe, #f5faf5);
+    background: linear-gradient(to bottom, #2c0e1e 0%, #051b05 61%, #000000 100%);
+    min-height: 100vh;
     color: #122512;
     padding: 40px;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
     box-sizing: border-box;
 }
+
 
 /* Container */
 .error-container {
     background-color: #ffffff;
     border: 1px solid #e3f1e3;
-    box-shadow: 0 12px 28px rgba(27, 58, 27, 0.2);
+    box-shadow: 0 16px 36px rgba(255, 255, 255, 0.25);
     border-radius: 12px;
-    padding: 40px 50px;
+    padding: 20px;
     text-align: center;
     max-width: 500px;
     width: 100%;
     transition: box-shadow 0.3s ease;
 }
 
-.error-container:hover {
-    box-shadow: 0 16px 36px rgba(27, 58, 27, 0.25);
-}
 
 /* Title */
 .error-title {
@@ -40,7 +38,7 @@ body {
 .error-display {
     font-size: 1.25em;
     color: #2a4c2a;
-    margin-bottom: 30px;
+    margin: 10px 10px 15px;
     line-height: 1.7;
 }
 

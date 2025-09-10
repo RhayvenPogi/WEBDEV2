@@ -1,22 +1,31 @@
 
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #fefefe, #f5faf5);
     color: #122512;
     padding: 20px;
     line-height: 1.6;
     margin: 0;
+    background: linear-gradient(to bottom, #301523FF 0%, #173217FF 61%, #041E01FF 100%);
+    min-height: 100vh;
 }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px #000000;
+}
+
 
 /* Headings */
 h1 {
-    background: linear-gradient(90deg, #122512, #1c3a1e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #122512;
     text-align: center;
     font-weight: 900;
     font-size: 2.7em;
-    margin-bottom: 30px;
+    margin: 20px 0 20px 0;
     letter-spacing: 1px;
 }
 
