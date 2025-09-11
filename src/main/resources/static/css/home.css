@@ -128,3 +128,30 @@ tr:hover {
     background: linear-gradient(135deg, #a12d2d, #b33a3a);
     color: #ffeef5;
 }
+
+/* Flex container for buttons */
+.button-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Logout button styled similarly to add-button */
+.logout-button {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #7a1a1a, #a12d2d); /* red gradient */
+    color: #fff0f5;
+    border: 2px solid #fff0f5;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
+}
+
+/* Hover effect for logout button */
+.logout-button:hover {
+    background: linear-gradient(135deg, #a12d2d, #b33a3a);
+    color: #ffeef5;
+    transform: translateY(-2px);
+}

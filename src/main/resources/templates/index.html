@@ -7,7 +7,13 @@
 <body>
 <div class="container">
 <h1>Rhayven's Car List</h1>
-<a class="add-button" th:href="@{/add}">Add New Car</a>
+
+<div class="button-bar">
+    <a class="add-button" th:href="@{/add}">Add New Car</a>
+    <form th:action="@{/logout}" method="post" style="margin:0;">
+        <button type="submit" class="logout-button">Logout</button>
+    </form>
+</div>
 <table border="1">
     <thead>
     <tr>

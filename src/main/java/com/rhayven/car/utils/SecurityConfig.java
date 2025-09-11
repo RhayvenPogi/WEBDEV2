@@ -1,5 +1,6 @@
 package com.rhayven.car.utils;
 
+import com.rhayven.car.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -7,7 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import com.johnverz.webdev1_g1.service.CustomUserDetailsService;
+
 
 @Configuration
 public class SecurityConfig {
@@ -33,14 +34,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/register").permitAll() // public
+                        .requestMatchers("/login","/register", "/css/**").permitAll() // public
                         .anyRequest().authenticated()             // secure everything else
                 )
                 .formLogin(login -> login
+                        .loginPage("/login")
                         .defaultSuccessUrl("/", true) // redirect after login
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll());
+                .logout(logout -> logout
+                        .logoutUrl("/logout")             // default: /logout
+                        .logoutSuccessUrl("/login?logout") // redirect after logout
+                        .permitAll()
+                );
 
         return http.build();
     }

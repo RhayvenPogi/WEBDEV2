@@ -1,12 +1,44 @@
-<form th:action="@{/login}" method="post">
-    <div>
-        <label>Username:</label>
-        <input type="text" name="username"/>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}" />
+</head>
+<body>
+
+<div class="container">
+    <!-- Left side - Simple Design -->
+    <div class="design-side">
+        <div class="welcome-text">
+            <h1>Welcome Back</h1>
+            <p>Please sign in to your account to continue</p>
+        </div>
     </div>
-    <div>
-        <label>Password:</label>
-        <input type="password" name="password"/>
+
+    <!-- Right side - Login Form -->
+    <div class="form-side">
+        <div class="login-container">
+            <h2>Login</h2>
+            <p class="subtitle">Enter your credentials</p>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label>Username:</label>
+                    <input type="text" name="username" required/>
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input type="password" name="password" required/>
+                </div>
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+
+            <div class="register-link">
+                <a th:href="@{/register}">Don't have an account? Register here</a>
+            </div>
+        </div>
     </div>
-    <button type="submit">Login</button>
-</form>
-<a th:href="@{/register}">Register</a>
+</div>
+</body>
+</html>

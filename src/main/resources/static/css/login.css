@@ -1,0 +1,183 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Main container */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Left side - Simple Design */
+.design-side {
+    flex: 1;
+    background: linear-gradient(135deg, #022308 0%, #022308FF 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Welcome text */
+.welcome-text {
+    text-align: center;
+    color: white;
+}
+
+.welcome-text h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.welcome-text p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    max-width: 350px;
+    line-height: 1.5;
+}
+
+/* Right side - Login Form */
+.form-side {
+    flex: 1;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+}
+
+/* Login form styling */
+.login-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+h2 {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    color: #1a4a3a;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: #666;
+    margin-bottom: 2.5rem;
+    font-size: 1rem;
+}
+
+form {
+    width: 100%;
+}
+
+/* Form field containers */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+/* Labels */
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #1a4a3a;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+/* Input fields */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background-color: #fafafa;
+    color: #333;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #2d6e4e;
+    background-color: white;
+}
+
+/* Submit button */
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background: #2d6e4e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1.5rem;
+}
+
+.login-btn:hover {
+    background: #225540;
+}
+
+/* Register link */
+.register-link {
+    text-align: center;
+}
+
+.register-link a {
+    color: #2d6e4e;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .design-side {
+        flex: 0.4;
+    }
+
+    .form-side {
+        flex: 0.6;
+    }
+
+    .welcome-text h1 {
+        font-size: 2.2rem;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .design-side {
+        display: none;
+    }
+
+    .form-side {
+        flex: 1;
+        padding: 1.5rem;
+    }
+}
