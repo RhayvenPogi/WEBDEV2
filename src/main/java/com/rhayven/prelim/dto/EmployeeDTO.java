@@ -1,50 +1,41 @@
 package com.rhayven.prelim.dto;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-@Entity
+/**
+ * DTO for employee data with validation.
+ */
 public class EmployeeDTO {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
 
-    @NotBlank(message= "this is required")
+    /** Employee name (required). */
+    @NotBlank(message = "This is required")
     private String name;
 
-    @Email
-    @NotBlank(message= "this is required")
+    /** Employee email (required, unique, valid format). */
+    @NotBlank(message = "This is required")
+    @Email(message = "Email format is required")
+    @Column(unique = true)
     private String email;
 
-    // Getters and Setters
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
+    /** @return employee name */
     public String getName() {
         return name;
     }
 
+    /** @param name employee name */
     public void setName(String name) {
         this.name = name;
     }
 
+    /** @return employee email */
     public String getEmail() {
         return email;
     }
 
+    /** @param email employee email */
     public void setEmail(String email) {
-        this.email =  email;
+        this.email = email;
     }
-
 }
-

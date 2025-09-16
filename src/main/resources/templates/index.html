@@ -1,43 +1,42 @@
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-
-    <title>New Employee</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management</title>
+    <link rel="stylesheet" th:href="@{/index.css}">
 </head>
 <body>
 <div class="container">
-    <h1>Add Employee</h1>
+    <h1>Employee Management</h1>
 
     <div class="button-bar">
         <a class="add-button" th:href="@{/add}">Add New Employee</a>
-        <form th:action="@{/logout}" method="post" style="margin:0;">
+        <form th:action="@{/logout}" method="post" >
             <button type="submit" class="logout-button">Logout</button>
         </form>
     </div>
-    <table border="1">
+
+    <table>
         <thead>
         <tr>
             <th>Employee ID</th>
-            <th>License Plate</th>
-            <th>Make</th>
-
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="employee: ${employees}">
-            <td th:text="${employee.id}"></td>
-            <td th:text="${employee.name}"></td>
-            <td th:text="${employee.email}"></td>
-
-            <td class="action-links">
+        <tr th:each="employee : ${employees}">
+            <td th:text="${employee.id}">1</td>
+            <td th:text="${employee.name}">John Doe</td>
+            <td th:text="${employee.email}">john@example.com</td>
+            <td>
                 <a th:href="@{/edit/{id}(id=${employee.id})}" class="edit-btn">Edit</a>
                 <a th:href="@{/delete/{id}(id=${employee.id})}" class="delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
             </td>
+        </tr>
         </tbody>
-
-
     </table>
 </div>
 </body>

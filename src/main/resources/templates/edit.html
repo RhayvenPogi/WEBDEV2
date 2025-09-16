@@ -1,33 +1,30 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-
+    <meta charset="UTF-8">
     <title>Edit Employee</title>
-
+    <link rel="stylesheet" th:href="@{/edit.css}">
 </head>
 <body>
 <div class="container">
     <h1>Edit Employee</h1>
-    <form th:action="@{/save}" th:object="${employeeDTO}" method="post" class="employee-form">
+
+    <form th:action="@{/update/{id}(id=${id})}" th:object="${employeeDTO}" method="post" class="employee-form">
 
         <label>Name:</label>
-        <input type="text" th:field="*{name}"/>
+        <input type="text" th:field="*{name}" />
         <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
 
         <label>Email:</label>
-        <input type="text" th:field="*{email}"/>
+        <input type="text" th:field="*{email}" />
         <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
 
-        <button type="submit" class="add-button">Add Employee</button>
+        <div id="form-buttons-area">
+            <button type="submit" class="update-button">Update Employee</button>
+            <input type="reset" class="reset" value="Reset" />
+            <a th:href="@{/}" class="back-link">Back to Employee List</a>
+        </div>
     </form>
-
-    <div id="form-buttons-area">
-        <input type="submit" th:value="'Update '">
-        <input type="reset" value="Reset">
-        <a th:href="@{/}" class="back">Back to Employee List</a>
-    </div>
-
 </div>
-
 </body>
 </html>
