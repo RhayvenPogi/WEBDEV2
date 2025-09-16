@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>New Employee</title>
+
+</head>
+<body>
+<div class="container">
+    <h1>Add Employee</h1>
+
+    <div class="button-bar">
+        <a class="add-button" th:href="@{/add}">Add New Employee</a>
+        <form th:action="@{/logout}" method="post" style="margin:0;">
+            <button type="submit" class="logout-button">Logout</button>
+        </form>
+    </div>
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>License Plate</th>
+            <th>Make</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee: ${employees}">
+            <td th:text="${employee.id}"></td>
+            <td th:text="${employee.name}"></td>
+            <td th:text="${employee.email}"></td>
+
+            <td class="action-links">
+                <a th:href="@{/edit/{id}(id=${employee.id})}" class="edit-btn">Edit</a>
+                <a th:href="@{/delete/{id}(id=${employee.id})}" class="delete-btn" onclick="return confirm('Are you sure?');">Delete</a>
+            </td>
+        </tbody>
+
+
+    </table>
+</div>
+</body>
+</html>
