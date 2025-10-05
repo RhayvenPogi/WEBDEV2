@@ -139,7 +139,6 @@ tr:hover {
 
 /* Logout button styled similarly to add-button */
 .logout-button {
-    padding: 10px 18px;
     background: linear-gradient(135deg, #7a1a1a, #a12d2d); /* red gradient */
     color: #fff0f5;
     border: 2px solid #fff0f5;
@@ -147,6 +146,7 @@ tr:hover {
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.2s ease, background 0.3s ease, color 0.3s ease;
+    padding: 15px 18px;
 }
 
 /* Hover effect for logout button */

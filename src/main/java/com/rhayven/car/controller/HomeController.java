@@ -13,11 +13,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class CarController {
+public class HomeController {
 
     private final CarService carService;
 
-    public CarController(CarService carService) {
+    public HomeController(CarService carService) {
         this.carService = carService;
     }
 

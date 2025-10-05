@@ -22,17 +22,17 @@ public class CarService {
     }
 
     public void save(CarDTO carDTO) {
-        Car car = new Car();
-        car.setLicensePlateNumber(carDTO.getLicensePlateNumber());
-        car.setMake(carDTO.getMake());
-        car.setModel(carDTO.getModel());
-        car.setYear(carDTO.getYear());
-        car.setColor(carDTO.getColor());
-        car.setBodyType(carDTO.getBodyType());
-        car.setEngineType(carDTO.getEngineType());
-        car.setTransmission(carDTO.getTransmission());
+        Car newCar = new Car();
+        newCar.setLicensePlateNumber(carDTO.getLicensePlateNumber());
+        newCar.setMake(carDTO.getMake());
+        newCar.setModel(carDTO.getModel());
+        newCar.setYear(carDTO.getYear());
+        newCar.setColor(carDTO.getColor());
+        newCar.setBodyType(carDTO.getBodyType());
+        newCar.setEngineType(carDTO.getEngineType());
+        newCar.setTransmission(carDTO.getTransmission());
 
-        carRepository.save(car);
+        carRepository.save(newCar);
     }
 
     public Car getCarById(int id) {
