@@ -4,7 +4,9 @@ import com.rhayven.car.dto.CarDTO;
 import com.rhayven.car.entity.Car;
 import com.rhayven.car.service.CarService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -28,17 +30,25 @@ public class CarRestController {
     }
 
     @PostMapping("/cars")
-    public void createCar(@Valid @RequestBody CarDTO carDTO) {
-        carService.save(carDTO);
+    public Car createCar(@Valid @RequestBody CarDTO carDTO) {
+
+        return carService.save(carDTO);
     }
 
     @PutMapping("/cars/{id}")
-    public void updateCar(@PathVariable int id, @Valid @RequestBody CarDTO carDTO) {
-        carService.update(id, carDTO);
+    public Car updateCar(@PathVariable int id, @Valid @RequestBody CarDTO carDTO) {
+        Car updateCar = carService.getCarById(id);
+        if(updateCar == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID " + id + " not found");
+        }
+        return carService.update(id, carDTO);
     }
 
     @DeleteMapping("/cars/{id}")
     public void deleteCar(@PathVariable int id) {
+        if(carService.getCarById(id) == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID " + id + " not found");
+        }
         carService.delete(id);
     }
 }

@@ -21,7 +21,7 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public void save(CarDTO carDTO) {
+    public Car save(CarDTO carDTO) {
         Car newCar = new Car();
         newCar.setLicensePlateNumber(carDTO.getLicensePlateNumber());
         newCar.setMake(carDTO.getMake());
@@ -32,15 +32,15 @@ public class CarService {
         newCar.setEngineType(carDTO.getEngineType());
         newCar.setTransmission(carDTO.getTransmission());
 
-        carRepository.save(newCar);
+        return carRepository.save(newCar);
     }
 
     public Car getCarById(int id) {
         return carRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Car", id));
+                .orElse(null);
     }
 
-    public void update(int id, CarDTO carDTO) {
+    public Car update(int id, CarDTO carDTO) {
         Car car = carRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Car", id));
 
@@ -53,7 +53,7 @@ public class CarService {
         car.setEngineType(carDTO.getEngineType());
         car.setTransmission(carDTO.getTransmission());
 
-        carRepository.save(car);
+        return carRepository.save(car);
     }
 
     public void delete(int id) {
