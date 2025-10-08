@@ -25,24 +25,28 @@ public class CarRestController {
         return carService.getAllCars();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/cars/{id}")
     public Car getCarById(@PathVariable int id) {
-        return carService.getCarById(id);
+        Car car = carService.getCarById(id);
+        if (car == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID " + id + " not found");
+        }
+        return car;
     }
 
     @PostMapping("/cars")
-    public Car createCar(@Valid @RequestBody CarDTO carDTO) {
+    public Car createCar(@Valid @RequestBody CarDTO car) {
 
-        return carService.save(carDTO);
+        return carService.save(car);
     }
 
     @PutMapping("/cars/{id}")
-    public Car updateCar(@PathVariable int id, @Valid @RequestBody CarDTO carDTO) {
+    public Car updateCar(@PathVariable int id, @Valid @RequestBody CarDTO car) {
         Car updateCar = carService.getCarById(id);
         if(updateCar == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID " + id + " not found");
         }
-        return carService.update(id, carDTO);
+        return carService.update(id, car);
     }
 
     @DeleteMapping("/cars/{id}")
