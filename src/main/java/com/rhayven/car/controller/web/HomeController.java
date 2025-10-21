@@ -1,4 +1,4 @@
-package com.rhayven.car.controller;
+package com.rhayven.car.controller.web;
 
 import com.rhayven.car.dto.CarDTO;
 import com.rhayven.car.entity.Car;

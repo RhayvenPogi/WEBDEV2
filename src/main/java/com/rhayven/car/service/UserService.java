@@ -17,6 +17,10 @@ public class UserService {
     }
 
     public void registerUser(String username, String password) {
+        if (userRepository.existsByUsername(username)){
+            throw new IllegalArgumentException("Username already taken");
+        }
+
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));

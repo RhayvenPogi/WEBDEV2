@@ -1,4 +1,4 @@
-package com.rhayven.car.controller;
+package com.rhayven.car.controller.web;
 
 import com.rhayven.car.service.UserService;
 import org.springframework.stereotype.Controller;
