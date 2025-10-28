@@ -4,6 +4,7 @@ import com.rhayven.car.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,16 +13,26 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
 public class SecurityConfig {
-    CustomUserDetailsService customUserDetailsService;
-    public SecurityConfig(CustomUserDetailsService userDetailsService) {
+
+    private final CustomUserDetailsService customUserDetailsService;
+    private final JwtDecoder jwtDecoder;
+
+    public SecurityConfig(CustomUserDetailsService userDetailsService, JwtDecoder jwtDecoder) {
         this.customUserDetailsService = userDetailsService;
+        this.jwtDecoder = jwtDecoder;
     }
 
     @Bean
@@ -29,68 +40,75 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
     @Bean
-    public AuthenticationManager authManager(
+    public AuthenticationManager authenticationManager(
             UserDetailsService userDetailsService,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder
+    ) {
         var authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
         return new ProviderManager(authProvider);
     }
 
-    /**
-     * API Security Filter Chain (JWT-based, Stateless)
-     * Higher priority (@Order(1)) - checked first
-     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://127.0.0.1:5500", "http://localhost:5500", "http://127.0.0.1:8000", "http://localhost:8000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
+    }
+
     @Bean
     @Order(1)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher("/api/**") // Only apply to /api/** endpoints
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for stateless API
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/auth/**").permitAll(); // Public auth endpoints
-                    auth.requestMatchers("/api/public/**").permitAll(); // Other public API endpoints
-                    //auth.requestMatchers("/api/admin/**").hasRole("ADMIN"); // Admin-only API
-                    //auth.requestMatchers("/api/user/**").hasAnyRole("USER", "ADMIN"); // User/Admin API
-                    auth.anyRequest().authenticated(); // All other API endpoints require authentication
-                })
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless
-                .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(withDefaults())) // Enable JWT authentication
-                .build();
+        http
+                .securityMatcher("/api/**")
+                .csrf(csrf -> csrf.disable())
+                .cors(withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/**").permitAll() // 👈 allow all for testing
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+                .logout(logout -> logout.disable());
+
+        return http.build();
     }
 
-    /**
-     * Web Security Filter Chain (Session-based)
-     * Lower priority (@Order(2)) - checked after API filter
-     */
     @Bean
     @Order(2)
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .securityMatcher("/**") // Apply to all other endpoints (web pages)
-                .csrf(withDefaults()) // Enable CSRF for session-based endpoints
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/", "/login", "/register", "/public/**",
-                            "/css/**", "/js/**", "/images/**").permitAll(); // Public web resources
-                    auth.anyRequest().authenticated(); // All other web pages require authentication
-                })
-                .formLogin(form -> form
-                        .loginPage("/login") // Custom login page
-                        .defaultSuccessUrl("/", true) // Redirect after successful login
+        System.out.println("webSecurityFilterChain" + http);
+        http
+                .securityMatcher(request ->
+                        !request.getRequestURI().startsWith("/api/")
+                ) // catch everything else not /api/**
+                .csrf(withDefaults())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/css/**", "/register", "/images/**").permitAll()
+                        .requestMatchers("/login").anonymous()
+                        .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
-                )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)) // Session-based
-                .build();
+                );
+
+        return http.build();
     }
 }

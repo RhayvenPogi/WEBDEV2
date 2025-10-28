@@ -31,6 +31,13 @@
                     <label>Password:</label>
                     <input type="password" name="password" required/>
                 </div>
+                <div th:if="${param.error}" class="alert error-message">
+                    Invalid username or password.
+                </div>
+                <div th:if="${param.logout}" class="alert logout-message">
+                    You have been logged out successfully.
+                </div>
+
                 <button type="submit" class="login-btn">Login</button>
             </form>
 

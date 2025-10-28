@@ -10,9 +10,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins= "http://127.0.0.1:5500")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/cars")
 public class CarRestController {
     private final CarService carService;
 
@@ -20,12 +20,12 @@ public class CarRestController {
         this.carService = carService;
     }
 
-    @GetMapping("/cars")
+    @GetMapping
     public List<Car> getCars(){
         return carService.getAllCars();
     }
 
-    @GetMapping("/cars/{id}")
+    @GetMapping("/{id}")
     public Car getCarById(@PathVariable int id) {
         Car car = carService.getCarById(id);
         if (car == null) {
@@ -34,13 +34,13 @@ public class CarRestController {
         return car;
     }
 
-    @PostMapping("/cars")
+    @PostMapping
     public Car createCar(@Valid @RequestBody CarDTO car) {
 
         return carService.save(car);
     }
 
-    @PutMapping("/cars/{id}")
+    @PutMapping("/{id}")
     public Car updateCar(@PathVariable int id, @Valid @RequestBody CarDTO car) {
         Car updateCar = carService.getCarById(id);
         if(updateCar == null){
@@ -49,7 +49,7 @@ public class CarRestController {
         return carService.update(id, car);
     }
 
-    @DeleteMapping("/cars/{id}")
+    @DeleteMapping("/{id}")
     public void deleteCar(@PathVariable int id) {
         if(carService.getCarById(id) == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Car with ID " + id + " not found");
