@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Management System (React)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans min-h-screen">
+  <div id="root" class="min-h-screen"></div>
+
+  <script type="text/babel">
+    const apiAuth = "http://localhost:7070/api/auth";
+    const apiCars = "http://localhost:7070/api/cars";
+
+    function App() {
+      const [token, setToken] = React.useState(localStorage.getItem("token") || "");
+      const [page, setPage] = React.useState(token ? "dashboard" : "login");
+      const [cars, setCars] = React.useState([]);
+      const [showModal, setShowModal] = React.useState(false);
+      const [editingCar, setEditingCar] = React.useState(null);
+      const [form, setForm] = React.useState({});
+      const [loading, setLoading] = React.useState(false);
+      const [formErrors, setFormErrors] = React.useState({}); // store validation messages
+
+      React.useEffect(() => {
+        if (page === "login" || page === "register") {
+          setForm({ username: "", password: "" });
+        } else {
+          setForm({
+            licensePlateNumber: "",
+            make: "",
+            model: "",
+            year: "",
+            color: "",
+            bodyType: "",
+            engineType: "",
+            transmission: ""
+          });
+        }
+        setFormErrors({});
+      }, [page]);
+
+      // ===== AUTH =====
+      async function handleLogin(e) {
+        e.preventDefault();
+        const username = e.target.username.value.trim();
+        const password = e.target.password.value.trim();
+        const errors = {};
+
+        if (!username) errors.username = "Username is required";
+        if (!password) errors.password = "Password is required";
+
+        if (Object.keys(errors).length > 0) {
+          setFormErrors(errors);
+          return;
+        }
+
+        setFormErrors({});
+        try {
+          setLoading(true);
+          const res = await fetch(`${apiAuth}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+
+          if (!res.ok) throw new Error("Invalid username or password");
+          const data = await res.json();
+
+          localStorage.setItem("token", data.token);
+          setToken(data.token);
+          setPage("dashboard");
+          fetchCars(data.token);
+        } catch (err) {
+          setFormErrors({ general: err.message });
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      async function handleRegister(e) {
+        e.preventDefault();
+        const username = e.target.username.value.trim();
+        const password = e.target.password.value.trim();
+        const errors = {};
+
+        if (!username) errors.username = "Username is required";
+        else if (username.length < 3) errors.username = "Username too short";
+
+        if (!password) errors.password = "Password is required";
+        else if (password.length < 6) errors.password = "Password must be at least 6 characters";
+
+        if (Object.keys(errors).length > 0) {
+          setFormErrors(errors);
+          return;
+        }
+
+        setFormErrors({});
+        try {
+          setLoading(true);
+          const res = await fetch(`${apiAuth}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || "Registration failed");
+
+          setPage("login");
+        } catch (err) {
+          setFormErrors({ general: err.message });
+        } finally {
+          setLoading(false);
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem("token");
+        setToken("");
+        setCars([]);
+        setPage("login");
+      }
+
+      // ===== CARS =====
+      async function fetchCars(activeToken = token) {
+        if (!activeToken) return;
+        try {
+          const res = await fetch(apiCars, {
+            headers: { "Authorization": `Bearer ${activeToken}` }
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error("Failed to fetch cars");
+          setCars(data);
+        } catch {}
+      }
+
+      function openCreateModal() {
+        setEditingCar(null);
+        setForm({
+          licensePlateNumber: "",
+          make: "",
+          model: "",
+          year: "",
+          color: "",
+          bodyType: "",
+          engineType: "",
+          transmission: ""
+        });
+        setFormErrors({});
+        setShowModal(true);
+      }
+
+      function openEditModal(car) {
+        setEditingCar(car);
+        setForm(car);
+        setFormErrors({});
+        setShowModal(true);
+      }
+
+      function closeModal() {
+        setShowModal(false);
+      }
+
+      function handleChange(e) {
+        const { id, value } = e.target;
+        setForm(prev => ({ ...prev, [id]: value }));
+      }
+
+      async function saveCar(e) {
+        e.preventDefault();
+        const errors = {};
+        Object.entries(form).forEach(([key, value]) => {
+          if (!value) errors[key] = `${key} is required`;
+        });
+        if (Object.keys(errors).length > 0) {
+          setFormErrors(errors);
+          return;
+        }
+
+        setFormErrors({});
+        const method = editingCar ? "PUT" : "POST";
+        const url = editingCar ? `${apiCars}/${editingCar.carId}` : apiCars;
+
+        try {
+          const res = await fetch(url, {
+            method,
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ ...form, year: parseInt(form.year) })
+          });
+
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || "Failed to save car");
+
+          fetchCars();
+          closeModal();
+        } catch (err) {
+          setFormErrors({ general: err.message });
+        }
+      }
+
+      async function deleteCar(id) {
+        if (!confirm("Delete this car?")) return;
+        try {
+          const res = await fetch(`${apiCars}/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+          });
+          if (!res.ok) throw new Error("Failed to delete car");
+          fetchCars();
+        } catch (err) {
+          console.log(err.message);
+        }
+      }
+
+      React.useEffect(() => {
+        if (token) fetchCars();
+      }, [token]);
+
+      if (loading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
+
+      if (page === "register") {
+        return (
+          <div className="grid lg:grid-cols-2 min-h-screen">
+            <div className="hidden lg:flex flex-col justify-center items-center bg-green-900 text-white p-10">
+              <h1 className="text-4xl font-bold mb-4 text-green-100">Create Your Account</h1>
+              <p className="text-green-200 text-center max-w-md">Join our car management system to keep track of your vehicles.</p>
+            </div>
+            <div className="flex justify-center items-center p-8 bg-gray-50">
+              <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 border border-green-200">
+                <h2 className="text-3xl font-semibold mb-6 text-center text-green-900">Register</h2>
+                {formErrors.general && <div className="text-red-600 mb-2">{formErrors.general}</div>}
+                <form onSubmit={handleRegister} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-green-700">Username</label>
+                    <input id="username" className="w-full p-2 rounded border border-green-400 bg-green-50 focus:ring-2 focus:ring-green-500" />
+                    {formErrors.username && <div className="text-red-600 text-sm mt-1">{formErrors.username}</div>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-green-700">Password</label>
+                    <input id="password" type="password" className="w-full p-2 rounded border border-green-400 bg-green-50 focus:ring-2 focus:ring-green-500" />
+                    {formErrors.password && <div className="text-red-600 text-sm mt-1">{formErrors.password}</div>}
+                  </div>
+                  <button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-medium transition">Register</button>
+                  <p className="text-center text-sm mt-3 text-green-700">
+                    Already have an account? <span onClick={() => setPage("login")} className="text-green-600 hover:underline cursor-pointer">Login here</span>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (page === "login") {
+        return (
+          <div className="grid lg:grid-cols-2 min-h-screen">
+            <div className="hidden lg:flex flex-col justify-center items-center bg-green-900 text-white p-10">
+              <h1 className="text-4xl font-bold mb-4 text-green-100">Welcome Back!</h1>
+              <p className="text-green-200 text-center max-w-md">Manage your vehicles easily with our Car Management System.</p>
+            </div>
+            <div className="flex justify-center items-center p-8 bg-gray-50">
+              <div className="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 border border-green-200">
+                <h2 className="text-3xl font-semibold mb-6 text-center text-green-900">Login</h2>
+                {formErrors.general && <div className="text-red-600 mb-2">{formErrors.general}</div>}
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-green-700">Username</label>
+                    <input id="username" className="w-full p-2 rounded border border-green-400 bg-green-50 focus:ring-2 focus:ring-green-500" />
+                    {formErrors.username && <div className="text-red-600 text-sm mt-1">{formErrors.username}</div>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1 text-green-700">Password</label>
+                    <input id="password" type="password" className="w-full p-2 rounded border border-green-400 bg-green-50 focus:ring-2 focus:ring-green-500" />
+                    {formErrors.password && <div className="text-red-600 text-sm mt-1">{formErrors.password}</div>}
+                  </div>
+                  <button type="submit" className="w-full bg-green-700 hover:bg-green-800 text-white py-2 rounded-lg font-medium transition">Login</button>
+                  <p className="text-center text-sm mt-3 text-green-700">
+                    Don’t have an account? <span onClick={() => setPage("register")} className="text-green-600 hover:underline cursor-pointer">Register here</span>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ===== DASHBOARD (simplified, without toast) =====
+      return (
+        <section className="min-h-screen bg-gray-100 text-gray-800 p-8">
+          <header className="grid sm:grid-cols-2 gap-4 items-center mb-8">
+            <h1 className="text-4xl font-extrabold text-green-900">Car Management System</h1>
+            <div className="flex justify-end gap-3">
+              <button onClick={openCreateModal} className="bg-green-700 hover:bg-green-800 text-white px-6 py-2.5 rounded-lg shadow-md font-medium">+ Add Car</button>
+              <button onClick={logout} className="bg-red-600 hover:bg-red-500 text-white px-6 py-2.5 rounded-lg shadow-md font-medium">Logout</button>
+            </div>
+          </header>
+
+          <div className="bg-white border border-green-200 rounded-2xl shadow-md p-6 overflow-x-auto">
+            <table className="min-w-full text-sm text-left border-collapse">
+              <thead className="bg-green-900 text-white uppercase text-xs tracking-wider">
+                <tr>
+                  <th className="px-4 py-3 text-center">No.</th>
+                  <th className="px-4 py-3 text-center">Plate</th>
+                  <th className="px-4 py-3 text-center">Make</th>
+                  <th className="px-4 py-3 text-center">Model</th>
+                  <th className="px-4 py-3 text-center">Year</th>
+                  <th className="px-4 py-3 text-center">Color</th>
+                  <th className="px-4 py-3 text-center">Body</th>
+                  <th className="px-4 py-3 text-center">Engine</th>
+                  <th className="px-4 py-3 text-center">Transmission</th>
+                  <th className="px-4 py-3 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-green-200 bg-green-50 text-green-900">
+                {cars.map((car, i) => (
+                  <tr key={car.carId} className="text-center hover:bg-emerald-200 transition">
+                    <td className="border p-2">{i + 1}</td>
+                    <td className="border p-2">{car.licensePlateNumber}</td>
+                    <td className="border p-2">{car.make}</td>
+                    <td className="border p-2">{car.model}</td>
+                    <td className="border p-2">{car.year}</td>
+                    <td className="border p-2">{car.color}</td>
+                    <td className="border p-2">{car.bodyType}</td>
+                    <td className="border p-2">{car.engineType}</td>
+                    <td className="border p-2">{car.transmission}</td>
+                    <td className="border p-2 items-center">
+                      <button onClick={() => openEditModal(car)} className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1.5 rounded font-medium mr-3">Edit</button>
+                      <button onClick={() => deleteCar(car.carId)} className="bg-red-600 hover:bg-red-500 text-white px-3 py-1.5 rounded font-medium">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center p-4 z-50">
+              <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-lg">
+                <h3 className="text-xl font-bold mb-4">{editingCar ? "Edit Car" : "Add Car"}</h3>
+                {formErrors.general && <div className="text-red-600 mb-2">{formErrors.general}</div>}
+                <form onSubmit={saveCar} className="grid grid-cols-1 gap-3">
+                  {Object.keys(form).map((key) => (
+                    <div key={key}>
+                      <label className="block text-sm font-medium capitalize mb-1">{key.replace(/([A-Z])/g, ' $1')}</label>
+                      <input
+                        id={key}
+                        value={form[key]}
+                        onChange={handleChange}
+                        className="w-full p-2 rounded border border-green-400 bg-green-50 focus:ring-2 focus:ring-green-500"
+                      />
+                      {formErrors[key] && <div className="text-red-600 text-sm mt-1">{formErrors[key]}</div>}
+                    </div>
+                  ))}
+                  <div className="flex justify-end gap-2 mt-2">
+                    <button type="button" onClick={closeModal} className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                    <button type="submit" className="bg-green-700 hover:bg-green-800 text-white px-4 py-2 rounded">{editingCar ? "Update" : "Save"}</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+        </section>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
