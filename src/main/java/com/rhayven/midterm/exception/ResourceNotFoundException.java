@@ -1,4 +1,4 @@
-package com.rhayven.prelim.exception;
+package com.rhayven.midterm.exception;
 
 /**
  * Exception thrown when a resource (e.g., employee) is not found by ID.

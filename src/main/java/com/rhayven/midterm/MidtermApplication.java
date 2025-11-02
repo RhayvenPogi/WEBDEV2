@@ -1,13 +1,13 @@
-package com.rhayven.prelim;
+package com.rhayven.midterm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PrelimApplication {
+public class MidtermApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PrelimApplication.class, args);
+        SpringApplication.run(MidtermApplication.class, args);
     }
 
 }

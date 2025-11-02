@@ -1,4 +1,4 @@
-package com.rhayven.prelim.dto;
+package com.rhayven.midterm.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;

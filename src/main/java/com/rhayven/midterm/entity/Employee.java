@@ -1,4 +1,4 @@
-package com.rhayven.prelim.entity;
+package com.rhayven.midterm.entity;
 
 import jakarta.persistence.*;
 

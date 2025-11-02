@@ -1,4 +1,4 @@
-package com.rhayven.prelim.exception;
+package com.rhayven.midterm.exception;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;

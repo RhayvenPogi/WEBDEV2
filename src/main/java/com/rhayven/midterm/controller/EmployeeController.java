@@ -1,9 +1,9 @@
-package com.rhayven.prelim.controller;
+package com.rhayven.midterm.controller;
 
-import com.rhayven.prelim.dto.EmployeeDTO;
-import com.rhayven.prelim.entity.Employee;
-import com.rhayven.prelim.exception.ResourceNotFoundException;
-import com.rhayven.prelim.repository.EmployeeRepo;
+import com.rhayven.midterm.dto.EmployeeDTO;
+import com.rhayven.midterm.entity.Employee;
+import com.rhayven.midterm.exception.ResourceNotFoundException;
+import com.rhayven.midterm.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,15 +19,15 @@ import java.util.List;
 @Controller
 public class EmployeeController {
 
-    private final EmployeeRepo employeeRepo;
+    private final EmployeeService employeeService;
 
     /**
-     * Constructor for injecting {@link EmployeeRepo}.
+     * Constructor for injecting {@link EmployeeService}.
      *
-     * @param employeeRepo the repository for employee data access
+     * @param employeeService the service for handling business logic
      */
-    public EmployeeController(EmployeeRepo employeeRepo) {
-        this.employeeRepo = employeeRepo;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     /**
@@ -38,7 +38,7 @@ public class EmployeeController {
      */
     @GetMapping("/")
     public String index(Model model) {
-        List<Employee> employees = employeeRepo.findAll();
+        List<Employee> employees = employeeService.getAllEmployees();
         model.addAttribute("employees", employees);
         return "index";
     }
@@ -63,23 +63,18 @@ public class EmployeeController {
      * @return a redirect to the employee list view if successful, or back to the form if errors occur
      */
     @PostMapping("/save")
-    public String saveCar(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
-                          BindingResult result) {
+    public String saveEmployee(@Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
+                               BindingResult result) {
         if (result.hasErrors()) {
             return "new";
         }
 
-        if (employeeRepo.findByEmail(employeeDTO.getEmail()).isPresent()) {
-            result.rejectValue("email", "error.employeeDTO",
-                    "This email is already registered. Please use a different email.");
+        try {
+            employeeService.saveEmployee(employeeDTO);
+        } catch (IllegalArgumentException e) {
+            result.rejectValue("email", "error.employeeDTO", e.getMessage());
             return "new";
         }
-
-        Employee employee = new Employee();
-        employee.setName(employeeDTO.getName());
-        employee.setEmail(employeeDTO.getEmail());
-
-        employeeRepo.save(employee);
 
         return "redirect:/";
     }
@@ -91,8 +86,12 @@ public class EmployeeController {
      * @return a redirect to the employee list view
      */
     @GetMapping("/delete/{id}")
-    public String deleteCar(@PathVariable int id) {
-        employeeRepo.deleteById(id);
+    public String deleteEmployee(@PathVariable int id) {
+        try {
+            employeeService.deleteEmployee(id);
+        } catch (ResourceNotFoundException e) {
+            // Optionally handle missing record gracefully
+        }
         return "redirect:/";
     }
 
@@ -106,8 +105,7 @@ public class EmployeeController {
      */
     @GetMapping("/edit/{id}")
     public String editEmployee(@PathVariable int id, Model model) {
-        Employee employee = employeeRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee", id));
+        Employee employee = employeeService.getEmployeeById(id);
 
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName(employee.getName());
@@ -129,7 +127,7 @@ public class EmployeeController {
      * @throws ResourceNotFoundException if the employee with the given ID does not exist
      */
     @PostMapping("/update/{id}")
-    public String storeUpdateCar(@PathVariable int id,
+    public String updateEmployee(@PathVariable int id,
                                  @Valid @ModelAttribute("employeeDTO") EmployeeDTO employeeDTO,
                                  BindingResult result,
                                  Model model) {
@@ -138,27 +136,15 @@ public class EmployeeController {
             return "edit";
         }
 
-        Employee employee = employeeRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee", id));
-
-        // Check if email is already used by another employee
-        employeeRepo.findByEmail(employeeDTO.getEmail()).ifPresent(e -> {
-            if (e.getId() != id) {
-                result.rejectValue("email", "error.employeeDTO",
-                        "This email is already in use by another employee. Please enter a different email.");
-            }
-        });
-
-        // If duplicate email was found, return to edit form
-        if (result.hasErrors()) {
+        try {
+            employeeService.updateEmployee(id, employeeDTO);
+        } catch (IllegalArgumentException e) {
+            result.rejectValue("email", "error.employeeDTO", e.getMessage());
             model.addAttribute("id", id);
             return "edit";
+        } catch (ResourceNotFoundException e) {
+            throw e;
         }
-
-        employee.setName(employeeDTO.getName());
-        employee.setEmail(employeeDTO.getEmail());
-
-        employeeRepo.save(employee);
 
         return "redirect:/";
     }

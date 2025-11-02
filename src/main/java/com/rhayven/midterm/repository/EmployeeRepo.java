@@ -1,6 +1,6 @@
-package com.rhayven.prelim.repository;
+package com.rhayven.midterm.repository;
 
-import com.rhayven.prelim.entity.Employee;
+import com.rhayven.midterm.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

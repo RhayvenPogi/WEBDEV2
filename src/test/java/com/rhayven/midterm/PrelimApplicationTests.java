@@ -1,4 +1,4 @@
-package com.rhayven.prelim;
+package com.rhayven.midterm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
