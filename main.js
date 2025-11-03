@@ -30,12 +30,14 @@ function fetchProducts() {
 
 function openCreateModal() {
     document.getElementById("productForm").reset();
+    clearErrors();
     document.getElementById("productId").value = "";
     document.getElementById("modalTitle").innerText = "Add Product";
     document.getElementById("productModal").classList.remove("hidden");
 }
 
 function openEditModal(id, name, description, unit, price, stock) {
+    clearErrors();
     document.getElementById("productId").value = id;
     document.getElementById("productName").value = name;
     document.getElementById("productDescription").value = description;
@@ -50,14 +52,51 @@ function closeModal() {
     document.getElementById("productModal").classList.add("hidden");
 }
 
+function clearErrors() {
+    const inputs = ["productName", "productDescription", "productUnit", "productPrice", "productStock"];
+    inputs.forEach(id => {
+        const field = document.getElementById(id);
+        field.classList.remove("border-red-500");
+        const error = document.getElementById(id + "Error");
+        if (error) error.innerText = "";
+    });
+}
+
 function saveProduct(e) {
     e.preventDefault();
-    const id = document.getElementById("productId").value;
+    clearErrors();
+
+    const id = document.getElementById("productId").value.trim();
     const name = document.getElementById("productName").value.trim();
     const description = document.getElementById("productDescription").value.trim();
     const unit = document.getElementById("productUnit").value.trim();
     const price = parseFloat(document.getElementById("productPrice").value);
     const stock = parseInt(document.getElementById("productStock").value);
+
+    let valid = true;
+
+    if (!name) {
+        showError("productName", "Name is required");
+        valid = false;
+    }
+    if (!description) {
+        showError("productDescription", "Description is required");
+        valid = false;
+    }
+    if (!unit) {
+        showError("productUnit", "Unit is required");
+        valid = false;
+    }
+    if (isNaN(price) || price < 1) {
+        showError("productPrice", "Price must be at least 1");
+        valid = false;
+    }
+    if (isNaN(stock) || stock < 1) {
+        showError("productStock", "Stock must be at least 1");
+        valid = false;
+    }
+
+    if (!valid) return;
 
     const product = { name, description, unit, price, stock };
     const method = id ? "PUT" : "POST";
@@ -77,6 +116,19 @@ function saveProduct(e) {
             fetchProducts();
         })
         .catch(err => console.error(err));
+}
+
+function showError(id, message) {
+    const field = document.getElementById(id);
+    field.classList.add("border-red-500");
+    let error = document.getElementById(id + "Error");
+    if (!error) {
+        error = document.createElement("div");
+        error.id = id + "Error";
+        error.className = "text-red-500 text-sm mt-1";
+        field.parentNode.appendChild(error);
+    }
+    error.innerText = message;
 }
 
 function deleteProduct(id) {
