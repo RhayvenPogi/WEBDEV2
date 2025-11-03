@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Employee Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-white text-[#333] font-sans p-6">
+<div id="root"></div>
+
+<script type="text/babel">
+    const apiEmployees = "http://localhost:7777/api/employees";
+
+    function App() {
+        const [employees, setEmployees] = React.useState([]);
+        const [showModal, setShowModal] = React.useState(false);
+        const [editingEmployee, setEditingEmployee] = React.useState(null);
+        const [form, setForm] = React.useState({name: "", email: ""});
+        const [formErrors, setFormErrors] = React.useState({});
+
+        React.useEffect(() => {
+            fetchEmployees();
+        }, []);
+
+        function fetchEmployees() {
+            fetch(apiEmployees)
+                .then((res) => res.json())
+                .then((data) => setEmployees(data))
+                .catch(() => alert("Failed to load employees."));
+        }
+
+        function openCreateModal() {
+            setEditingEmployee(null);
+            setForm({name: "", email: ""});
+            setFormErrors({});
+            setShowModal(true);
+        }
+
+        function openEditModal(emp) {
+            setEditingEmployee(emp);
+            setForm(emp);
+            setFormErrors({});
+            setShowModal(true);
+        }
+
+        function closeModal() {
+            setShowModal(false);
+        }
+
+        function handleChange(e) {
+            const {id, value} = e.target;
+            setForm((prev) => ({...prev, [id]: value}));
+        }
+
+        function saveEmployee(e) {
+            e.preventDefault();
+            const errors = {};
+            if (!form.name.trim()) errors.name = "Name is required";
+            if (!form.email.trim()) errors.email = "Email is required";
+            setFormErrors(errors);
+            if (Object.keys(errors).length > 0) return;
+
+            const method = editingEmployee ? "PUT" : "POST";
+            const url = editingEmployee
+                ? `${apiEmployees}/${editingEmployee.id}`
+                : apiEmployees;
+
+            fetch(url, {
+                method,
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(form),
+            })
+                .then((res) => {
+                    if (!res.ok) return res.text().then((text) => {
+                        throw new Error(text || "Invalid data");
+                    });
+                    fetchEmployees();
+                    closeModal();
+                })
+                .catch(() => setFormErrors({email: "Error saving employee."}));
+        }
+
+        function deleteEmployee(id) {
+            if (!confirm("Delete this employee?")) return;
+            fetch(`${apiEmployees}/${id}`, {method: "DELETE"})
+                .then((res) => {
+                    if (!res.ok) throw new Error();
+                    fetchEmployees();
+                })
+                .catch(() => alert("Failed to delete employee."));
+        }
+
+        return (
+            <div className="max-w-3xl mx-auto bg-white border-2 border-[#660000] rounded-lg shadow-md p-6">
+                <h1 className="text-3xl font-extrabold text-center text-[#660000] mb-6">
+                    Employee Management System
+                </h1>
+
+                <div className="flex justify-end mb-4">
+                    <button
+                        onClick={openCreateModal}
+                        className="bg-[#660000] hover:bg-[#800000] text-white px-5 py-2 rounded text-lg font-medium"
+                    >
+                        + Add Employee
+                    </button>
+                </div>
+
+                <table className="w-full border-collapse">
+                    <thead>
+                    <tr className="bg-[#660000] text-white">
+                        <th className="p-3 text-left">#</th>
+                        <th className="p-3 text-left">Name</th>
+                        <th className="p-3 text-left">Email</th>
+                        <th className="p-3 text-left">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {employees.map((emp, i) => (
+                        <tr key={emp.id} className="border-b hover:bg-[#ffe6e6]">
+                            <td className="p-3">{i + 1}</td>
+                            <td className="p-3">{emp.name}</td>
+                            <td className="p-3">{emp.email}</td>
+                            <td className="p-3">
+                                <button
+                                    onClick={() => openEditModal(emp)}
+                                    className="bg-[#660000] hover:bg-[#800000] text-white px-3 py-1 rounded mr-2"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => deleteEmployee(emp.id)}
+                                    className="bg-[#440000] hover:bg-[#660000] text-white px-3 py-1 rounded"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+
+                {showModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center p-4">
+                        <div className="bg-white p-6 rounded-lg border-2 border-[#660000] shadow-lg w-full max-w-md">
+                            <h3 className="text-xl font-bold text-[#660000] mb-4 text-center">
+                                {editingEmployee ? "Edit Employee" : "Add Employee"}
+                            </h3>
+                            <form onSubmit={saveEmployee} className="space-y-4">
+                                <div>
+                                    <label className="block text-[#660000] font-medium mb-1">Name</label>
+                                    <input
+                                        id="name"
+                                        value={form.name}
+                                        onChange={handleChange}
+                                        className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#660000]"
+                                    />
+                                    {formErrors.name && (
+                                        <p className="text-red-600 text-sm mt-1">{formErrors.name}</p>
+                                    )}
+                                </div>
+
+                                <div>
+                                    <label className="block text-[#660000] font-medium mb-1">Email</label>
+                                    <input
+                                        id="email"
+                                        value={form.email}
+                                        onChange={handleChange}
+                                        className="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#660000]"
+                                    />
+                                    {formErrors.email && (
+                                        <p className="text-red-600 text-sm mt-1">{formErrors.email}</p>
+                                    )}
+                                </div>
+
+                                <div className="flex justify-end gap-3">
+                                    <button
+                                        type="button"
+                                        onClick={closeModal}
+                                        className="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="bg-[#660000] hover:bg-[#800000] text-white px-4 py-2 rounded"
+                                    >
+                                        {editingEmployee ? "Update" : "Save"}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

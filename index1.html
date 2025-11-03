@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Employee Management System</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    const apiEmployees = "http://localhost:7777/api/employees";
+
+    function App() {
+        const [employees, setEmployees] = React.useState([]);
+        const [showModal, setShowModal] = React.useState(false);
+        const [editingEmployee, setEditingEmployee] = React.useState(null);
+        const [form, setForm] = React.useState({name: "", email: ""});
+        const [formErrors, setFormErrors] = React.useState({});
+
+        React.useEffect(() => {
+            fetchEmployees();
+        }, []);
+
+        function fetchEmployees() {
+            fetch(apiEmployees)
+                .then(res => res.json())
+                .then(data => setEmployees(data))
+                .catch(() => alert("Failed to load employees."));
+        }
+
+        function openCreateModal() {
+            setEditingEmployee(null);
+            setForm({name: "", email: ""});
+            setFormErrors({});
+            setShowModal(true);
+        }
+
+        function openEditModal(emp) {
+            setEditingEmployee(emp);
+            setForm(emp);
+            setFormErrors({});
+            setShowModal(true);
+        }
+
+        function closeModal() {
+            setShowModal(false);
+        }
+
+        function handleChange(e) {
+            const {id, value} = e.target;
+            setForm(prev => ({...prev, [id]: value}));
+        }
+
+        function saveEmployee(e) {
+            e.preventDefault();
+            const errors = {};
+            if (!form.name.trim()) errors.name = "Name is required";
+            if (!form.email.trim()) errors.email = "Email is required";
+            setFormErrors(errors);
+            if (Object.keys(errors).length > 0) return;
+
+            const method = editingEmployee ? "PUT" : "POST";
+            const url = editingEmployee
+                ? `${apiEmployees}/${editingEmployee.id}`
+                : apiEmployees;
+
+            fetch(url, {
+                method,
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(form),
+            })
+                .then(res => {
+                    if (!res.ok) {
+                        return res.text().then(text => {
+                            throw new Error(text || "Invalid data");
+                        });
+                    }
+                    fetchEmployees();
+                    closeModal();
+                })
+                .catch(() => setFormErrors({email: "Error saving employee."}));
+        }
+
+        function deleteEmployee(id) {
+            if (!confirm("Delete this employee?")) return;
+            fetch(`${apiEmployees}/${id}`, {method: "DELETE"})
+                .then(res => {
+                    if (!res.ok) throw new Error();
+                    fetchEmployees();
+                })
+                .catch(() => alert("Failed to delete employee."));
+        }
+
+        return (
+            <div>
+                <h1>Employee Management System</h1>
+                <button onClick={openCreateModal}>Add Employee</button>
+
+                <table border="1" cellPadding="8" cellSpacing="0" style={{marginTop: "10px", width: "100%"}}>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {employees.map((emp, i) => (
+                        <tr key={emp.id}>
+                            <td>{i + 1}</td>
+                            <td>{emp.name}</td>
+                            <td>{emp.email}</td>
+                            <td>
+                                <button onClick={() => openEditModal(emp)}>Edit</button>
+                                <button onClick={() => deleteEmployee(emp.id)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+
+                {showModal && (
+                    <div>
+                        <h3>{editingEmployee ? "Edit Employee" : "Add Employee"}</h3>
+                        <form onSubmit={saveEmployee}>
+                            <div>
+                                <label>Name:</label><br/>
+                                <input id="name" value={form.name} onChange={handleChange}/>
+                                {formErrors.name && <p style={{color: "red"}}>{formErrors.name}</p>}
+                            </div>
+
+                            <div>
+                                <label>Email:</label><br/>
+                                <input id="email" value={form.email} onChange={handleChange}/>
+                                {formErrors.email && <p style={{color: "red"}}>{formErrors.email}</p>}
+                            </div>
+
+                            <button type="submit">{editingEmployee ? "Update" : "Save"}</button>
+                            <button type="button" onClick={closeModal}>Cancel</button>
+                        </form>
+                    </div>
+                )}
+            </div>
+        );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
