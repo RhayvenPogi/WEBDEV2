@@ -15,10 +15,11 @@ function fetchProducts() {
                     <td class="border p-2">${++counter}</td>
                     <td class="border p-2">${product.name}</td>
                     <td class="border p-2">${product.description}</td>
+                    <td class="border p-2">${product.unit}</td>
                     <td class="border p-2">${product.price}</td>
                     <td class="border p-2">${product.stock}</td>
                     <td class="border p-2">
-                        <button onclick="openEditModal(${product.id}, \`${product.name}\`, \`${product.description}\`, ${product.price}, ${product.stock})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
+                        <button onclick="openEditModal(${product.id}, \`${product.name}\`, \`${product.description}\`, \`${product.unit}\`, ${product.price}, ${product.stock})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
                         <button onclick="deleteProduct(${product.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
                     </td>
                 </tr>`;
@@ -34,10 +35,11 @@ function openCreateModal() {
     document.getElementById("productModal").classList.remove("hidden");
 }
 
-function openEditModal(id, name, description, price, stock) {
+function openEditModal(id, name, description, unit, price, stock) {
     document.getElementById("productId").value = id;
     document.getElementById("productName").value = name;
     document.getElementById("productDescription").value = description;
+    document.getElementById("productUnit").value = unit;
     document.getElementById("productPrice").value = price;
     document.getElementById("productStock").value = stock;
     document.getElementById("modalTitle").innerText = "Edit Product";
@@ -50,14 +52,14 @@ function closeModal() {
 
 function saveProduct(e) {
     e.preventDefault();
-
     const id = document.getElementById("productId").value;
-    const name = document.getElementById("productName").value;
-    const description = document.getElementById("productDescription").value;
+    const name = document.getElementById("productName").value.trim();
+    const description = document.getElementById("productDescription").value.trim();
+    const unit = document.getElementById("productUnit").value.trim();
     const price = parseFloat(document.getElementById("productPrice").value);
     const stock = parseInt(document.getElementById("productStock").value);
 
-    const product = { name, description, price, stock };
+    const product = { name, description, unit, price, stock };
     const method = id ? "PUT" : "POST";
     const url = id ? `${apiBase}/${id}` : apiBase;
 
@@ -66,23 +68,20 @@ function saveProduct(e) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(product)
     })
-    .then(res => {
-        if (!res.ok) throw new Error("Failed to save product");
-        return res.json();
-    })
-    .then(() => {
-        closeModal();
-        fetchProducts();
-    })
-    .catch(err => console.error(err));
+        .then(res => {
+            if (!res.ok) throw new Error("Failed to save product");
+            return res.json();
+        })
+        .then(() => {
+            closeModal();
+            fetchProducts();
+        })
+        .catch(err => console.error(err));
 }
 
 function deleteProduct(id) {
     if (!confirm("Delete this product?")) return;
     fetch(`${apiBase}/${id}`, { method: "DELETE" })
-        .then(res => {
-            if (!res.ok) throw new Error("Failed to delete product");
-            fetchProducts();
-        })
+        .then(() => fetchProducts())
         .catch(err => console.error(err));
 }
