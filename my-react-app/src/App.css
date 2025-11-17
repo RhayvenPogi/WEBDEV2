@@ -1,0 +1,182 @@
+/* Global Reset */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #102131; /* light blue background */
+  color: #111;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Center App Wrapper */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 40px 10px;
+}
+
+/* Main App Container */
+.app-container {
+  max-width: 1200px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Page Titles */
+h1 {
+  text-align: center;
+  color: #0047b3;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #0047b3;
+  margin-bottom: 15px;
+}
+
+
+
+.profile-list {
+  display: flex;
+  gap: 30px; /* space between cards */
+  flex-wrap: nowrap;
+  justify-content: center; /* center horizontally */
+  overflow-x: auto;
+  padding: 20px;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: white;
+  border-radius: 15px;
+  padding: 25px; /* increased padding for more spacing inside the card */
+  min-width: 250px;
+  text-align: center;
+  flex-shrink: 0;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
+  margin-bottom:10px;
+}
+
+.profile-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(60, 90, 200, 0.55);
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+}
+
+/* Step Counter */
+.step-counter {
+  margin-top: 25px;
+  margin-bottom: 30px;
+  background-color: #ffffff;
+  border: 2px solid #0047b3;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+}
+
+.step-counter p {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Step Counter Controls */
+.step-counter-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.step-counter-controls input {
+  max-width: 150px;
+  margin: 0;
+}
+
+/* Product Card */
+.product-card {
+  background-color: #ffffff;
+  border: 2px solid #0047b3;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 71, 179, 0.5);
+}
+
+.product-card h2 {
+  margin-bottom: 10px;
+}
+
+/* Button & Input Group */
+.button-input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.button-input-group input,
+.button-input-group button {
+  flex: 1;
+  height: 40px;
+  font-size: 16px;
+}
+
+/* Details Toggle */
+.details {
+  overflow: hidden;
+  max-height: 0;
+  padding: 0;
+  margin-top: 0;
+  transition: max-height 0.5s ease, padding 0.5s ease, margin-top 0.5s ease;
+  color: #333;
+}
+
+.details.show {
+  max-height: 200px;
+  padding-top: 10px;
+  margin-top: 10px;
+  animation: fadeSlide 0.5s forwards;
+}
+
+@keyframes fadeSlide {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* GENERAL BUTTONS */
+button {
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #0047b3;
+  color: #fff;
+  border: 2px solid #0047b3;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #003399;
+  border-color: #003399;
+  transform: scale(1.05);
+}
+
+/* Input Fields */
+input, select, textarea {
+  padding: 10px;
+  border-radius: 5px;
+  border: 2px solid #0047b3;
+  background-color: #e0f0ff;
+  color: #111;
+  margin-bottom: 10px;
+  width: 90%;
+}
