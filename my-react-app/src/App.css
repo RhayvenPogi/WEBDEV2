@@ -1,182 +1,124 @@
-/* Global Reset */
-html, body {
-  margin: 0;
-  padding: 0;
-  background-color: #102131; /* light blue background */
-  color: #111;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Center App Wrapper */
-body {
+.app-layout {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
   min-height: 100vh;
-  padding: 40px 10px;
+  width: 100vw;
+  background-color: #0f1b2b;
+  color: #fff;
+  font-family: Arial, sans-serif;
 }
 
-/* Main App Container */
-.app-container {
-  max-width: 1200px;
-  width: 100%;
-  background-color: #ffffff;
-  border-radius: 20px;
-  padding: 40px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+.sidebar {
+  width: 220px;
+  background-color: #16263d;
+  padding: 20px;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Page Titles */
-h1 {
-  text-align: center;
-  color: #0047b3;
-  margin-bottom: 30px;
-}
-
-h2 {
-  color: #0047b3;
+.sidebar h2 {
+  margin-top: 0;
   margin-bottom: 15px;
+  font-size: 22px;
 }
 
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
 
+.sidebar ul li {
+  margin: 12px 0;
+}
+
+.sidebar ul li a {
+  color: #d0d8e4;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.sidebar ul li a:hover {
+  color: #fff;
+}
 
 .profile-list {
   display: flex;
-  gap: 30px; /* space between cards */
-  flex-wrap: nowrap;
-  justify-content: center; /* center horizontally */
-  overflow-x: auto;
+  flex-direction: row;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.app-container {
+}
+
+.profile-list {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.app-container {
+  flex: 1;
+  padding: 30px;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-size: 32px;
+  text-align: center;
+}
+
+.card {
+  background-color: #1c2f47;
   padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.card h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 24px;
 }
 
 .profile-card {
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: white;
-  border-radius: 15px;
-  padding: 25px; /* increased padding for more spacing inside the card */
-  min-width: 250px;
-  text-align: center;
-  flex-shrink: 0;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.3s;
-  margin-bottom:10px;
+  background-color: #243b57;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 0 12px 12px 0;
 }
 
-.profile-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(60, 90, 200, 0.55);
-  background: linear-gradient(135deg, #6366f1, #3b82f6);
-}
-
-/* Step Counter */
 .step-counter {
-  margin-top: 25px;
-  margin-bottom: 30px;
-  background-color: #ffffff;
-  border: 2px solid #0047b3;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
+  background-color: #243b57;
+  padding: 15px;
+  border-radius: 8px;
 }
 
-.step-counter p {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-/* Step Counter Controls */
-.step-counter-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-}
-
-.step-counter-controls input {
-  max-width: 150px;
-  margin: 0;
-}
-
-/* Product Card */
-.product-card {
-  background-color: #ffffff;
-  border: 2px solid #0047b3;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 71, 179, 0.5);
-}
-
-.product-card h2 {
-  margin-bottom: 10px;
-}
-
-/* Button & Input Group */
-.button-input-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.button-input-group input,
-.button-input-group button {
-  flex: 1;
-  height: 40px;
-  font-size: 16px;
-}
-
-/* Details Toggle */
-.details {
-  overflow: hidden;
-  max-height: 0;
-  padding: 0;
-  margin-top: 0;
-  transition: max-height 0.5s ease, padding 0.5s ease, margin-top 0.5s ease;
-  color: #333;
-}
-
-.details.show {
-  max-height: 200px;
-  padding-top: 10px;
-  margin-top: 10px;
-  animation: fadeSlide 0.5s forwards;
-}
-
-@keyframes fadeSlide {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* GENERAL BUTTONS */
-button {
-  padding: 10px 15px;
+.step-counter input {
+  margin-right: 10px;
+  padding: 5px;
+  width: 60px;
   border-radius: 5px;
-  background-color: #0047b3;
-  color: #fff;
-  border: 2px solid #0047b3;
-  font-weight: bold;
+  border: none;
+}
+
+.product-info {
+  background-color: #243b57;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+
+button {
+  background-color: #3a6ea5;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  color: #fff;
+  font-size: 14px;
 }
 
 button:hover {
-  background-color: #003399;
-  border-color: #003399;
-  transform: scale(1.05);
-}
-
-/* Input Fields */
-input, select, textarea {
-  padding: 10px;
-  border-radius: 5px;
-  border: 2px solid #0047b3;
-  background-color: #e0f0ff;
-  color: #111;
-  margin-bottom: 10px;
-  width: 90%;
+  background-color: #4f89c4;
 }
