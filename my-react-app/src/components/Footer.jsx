@@ -1,5 +1,9 @@
-function Footer(){
-    return <Footer>&copy; Pogi's Sweet Treats. All rights reserved.</Footer>
+function Footer() {
+  return (
+    <footer>
+      &copy; {new Date().getFullYear()} Pogi's Sweet Treats. All rights reserved.
+    </footer>
+  );
 }
 
-export default Footer
+export default Footer;
